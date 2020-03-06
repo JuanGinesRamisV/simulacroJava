@@ -108,45 +108,49 @@ public class Cajero {
         return sesionIniciada;
     }
 
-    public boolean retirarDinero(int Dinero) {
+    public boolean retirarDinero(int Dinero) throws ExcepcionCajero {
         //billetes retirados sirve para almacenar el numero de billetes que se 
         //daran al cliente y tiene la misma estructura que el arraylist listaBilletes
         boolean retirar = false;
         int billetesRetirar[] = new int[this.getListaBilletes().length];
+        int copiaDinero = Dinero;
 
         //bucle que recorre todos los billetes
-        for (int i = 0; i < this.getListaBilletes().length; i++) {
-            //si el importe a retirar dividido el billete seleccionado es mayor que uno significa
-            //que podemos usar ese billete para darle al cliente el menor numero de billetes entonces
-            //se comprueba eso y ademas que tengamos billetes de ese tipo
-            if ((Dinero / this.getListaBilletes()[i][0]) >= 1 && this.getListaBilletes()[i][1] > 0
-                    && Dinero != 0) {
-                /*si la condicion anterior se cumple se comprueba que disponemos de de la cantidad de
+        if (Dinero > 0 && Dinero % 5 == 0) {
+
+            for (int i = 0; i < this.getListaBilletes().length; i++) {
+                //si el importe a retirar dividido el billete seleccionado es mayor que uno significa
+                //que podemos usar ese billete para darle al cliente el menor numero de billetes entonces
+                //se comprueba eso y ademas que tengamos billetes de ese tipo
+                if ((Dinero / this.getListaBilletes()[i][0]) >= 1 && this.getListaBilletes()[i][1] > 0
+                        && Dinero != 0) {
+                    /*si la condicion anterior se cumple se comprueba que disponemos de de la cantidad de
                 billetes de ese tipo en caso de que no se diera esa condicion se le dara la cantidad
                 disponible en el cajero de ese tipo de billetes
-                 */
-                System.out.println("necesitamos " + Dinero / this.getListaBilletes()[i][0]
-                        + "billetes de " + this.getListaBilletes()[i][0]);
-                if (this.getListaBilletes()[i][1] - (Dinero / this.getListaBilletes()[i][0]) >= 0) {
-                    billetesRetirar[i] = Dinero / this.getListaBilletes()[i][0];
-                    Dinero -= billetesRetirar[i] * this.getListaBilletes()[i][0];
-                } else {
-                    billetesRetirar[i] = this.getListaBilletes()[i][1];
-                    Dinero -= billetesRetirar[i] * this.getListaBilletes()[i][0];
-                }
+                     */
+                    if (this.getListaBilletes()[i][1] - (Dinero / this.getListaBilletes()[i][0]) >= 0) {
+                        billetesRetirar[i] = Dinero / this.getListaBilletes()[i][0];
+                        Dinero -= billetesRetirar[i] * this.getListaBilletes()[i][0];
+                    } else {
+                        billetesRetirar[i] = this.getListaBilletes()[i][1];
+                        Dinero -= billetesRetirar[i] * this.getListaBilletes()[i][0];
+                    }
 
-            } else {
-                System.out.println("nada");
+                }
             }
         }
 
         if (Dinero == 0) {
-            //se retiran los billetes del array si es posible la retirada del dinero
+            //se retiran los billetes del array si es posible satisfacer lo que
+            //el cliente pide
             for (int i = 0; i < billetesRetirar.length; i++) {
                 this.getListaBilletes()[i][1] -= billetesRetirar[i];
 
             }
             retirar = true;
+        }else{
+            retirar=false;
+            throw new ExcepcionCajero(Integer.toString(copiaDinero, 10));
         }
         return retirar;
     }

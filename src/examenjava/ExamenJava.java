@@ -6,6 +6,9 @@
 package examenjava;
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,18 +25,24 @@ public class ExamenJava {
         {20, 0}, {10, 18}, {5, 25}};
         Cajero micajero = new Cajero();
         micajero.setListaBilletes(cargaBilletes);
-        TarjetaDebito mitarj1 = new TarjetaDebito(200000, "43476294", "1234", "juan", "Ramis");
+        TarjetaDebito mitarj1 = new TarjetaDebito(2000, "43476294", "1234", "juan", "Ramis");
         TarjetaCredito mitarj2 = new TarjetaCredito(200, 443, "80", "1234", "ana", "Vera");
         micajero.añadirTarjeta(mitarj1);
         micajero.añadirTarjeta(mitarj2);
         Scanner lector = new Scanner(System.in);
         boolean salir = false;
 
-        
         while (salir == false) {
             int opcion = 0;
             int dinero;
             System.out.println("++++++++++++++++++");
+            for(int i=0;i<micajero.getListaTarjetas().size();i++){
+                System.out.println(micajero.getListaTarjetas().get(i)
+                .getClass().getSimpleName());
+                micajero.getListaTarjetas().get(i).mostrarTarjeta();
+                System.out.println("");
+                System.out.println("------------------");
+            }
             System.out.println("+++++++++++++++++++");
             micajero.mostrarCajero();
             int indiceCliente = -1;
@@ -44,17 +53,11 @@ public class ExamenJava {
             opcion = lector.nextInt();
             switch (opcion) {
                 case 1:
-                    /*
-                    indiceCliente = micajero.iniciarSesion();
-                    if (indiceCliente != -1) {
-
-                        System.out.println("Introduce el dinero a retirar");
-                        dinero = lector.nextInt();
-                        //if(micajero.getListaTarjetas().get(indiceCliente).)
-                        micajero.retirarDinero(dinero);
-                    }
-*/
                     retirarDinero(micajero);
+                    break;
+                case 2:
+                    System.out.println("Muchas gracias por usar el programa!!!");
+                    salir=true;
             }
         }
 
@@ -69,18 +72,22 @@ public class ExamenJava {
             int dinero = lector.nextInt();
             //se comprueba que el cliente tenga salgo disponible y que el dinero 
             //sea divisor de 5 y sea mayor que 0
-            if(micajero.getListaTarjetas().get(indiceCliente).SaldoDisponible(dinero)==true
-                    && dinero%5==0 && dinero>0){
-                
-            if(micajero.retirarDinero(dinero)==true){
-                System.out.println("Aqui tiens tu dinero");
-                micajero.getListaTarjetas().get(indiceCliente).disminuirSaldo(dinero);
-                System.out.println("");
-                System.out.println("+-+-+-+-+-+-+-+--+");
-            }
-                
-            }else{
-                System.out.println("Se ha producido un error");
+            if (micajero.getListaTarjetas().get(indiceCliente).SaldoDisponible(dinero) == true) {
+
+
+                try {
+                    if (micajero.retirarDinero(dinero) == true) {
+                        System.out.println("Aqui tiens tu dinero");
+                        micajero.getListaTarjetas().get(indiceCliente).disminuirSaldo(dinero);
+                        System.out.println("");
+                        System.out.println("+-+-+-+-+-+-+-+--+");
+                    }
+                } catch (ExcepcionCajero ex) {
+                    System.out.println(ex.getMessage());
+                }
+
+            } else {
+                System.out.println("No hay saldo disponible");
             }
         }
 

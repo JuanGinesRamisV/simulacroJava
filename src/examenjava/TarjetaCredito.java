@@ -9,7 +9,8 @@ package examenjava;
  *
  * @author juang
  */
-public class TarjetaCredito extends Tarjeta{
+public class TarjetaCredito extends Tarjeta {
+
     private double saldo;
     private double credito;
 
@@ -46,28 +47,41 @@ public class TarjetaCredito extends Tarjeta{
     public void setCredito(double credito) {
         this.credito = credito;
     }
-    
-    public void mostrarTarjeta(){
+
+    public void mostrarTarjeta() {
         super.mostrarTarjeta();
-        System.out.println("Saldo: "+this.getSaldo());
-        System.out.println("Credito: "+this.getCredito());
+        System.out.println("Saldo: " + this.getSaldo());
+        System.out.println("Credito: " + this.getCredito());
     }
 
     @Override
     public boolean SaldoDisponible(int retirar) {
         boolean dineroDisponible;
-        if((this.getSaldo()+this.getCredito())-retirar>=0){
-            dineroDisponible=true;
-        }else{
-            dineroDisponible=false;
+        if ((this.getSaldo() + this.getCredito()) - retirar >= 0) {
+            dineroDisponible = true;
+        } else {
+            dineroDisponible = false;
         }
         return dineroDisponible;
-    
+
     }
 
     @Override
     public void disminuirSaldo(int retirar) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //primero se retira el saldo y se comprueba si este menos el dinero a retirar
+        //es mayor que cero se resta al saldo si no se pone el saldo a cero y se resta el 
+        //saldo a la variable retirar
+        if(this.getSaldo()-retirar>=0){
+            this.setSaldo(this.getSaldo()-retirar);
+            retirar=0;
+        }else{
+            retirar-=this.getSaldo();
+            this.setSaldo(0);
+        }
+        
+        if(retirar!=0){
+            this.setCredito(this.getCredito()-retirar);
+        }
     }
-    
+
 }

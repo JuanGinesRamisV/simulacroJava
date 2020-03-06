@@ -36,26 +36,26 @@ public class TarjetaDebito extends Tarjeta {
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
-    
-    public boolean SaldoDisponible(int retirar){
+
+    public boolean SaldoDisponible(int retirar) {
         boolean dineroDisponible;
-        if(this.getSaldo()-retirar>=0){
-            dineroDisponible=true;
-        }else{
-            dineroDisponible=false;
+        if (this.getSaldo() - retirar >= 0) {
+            dineroDisponible = true;
+        } else {
+            dineroDisponible = false;
         }
         return dineroDisponible;
     }
-    
-    public void disminuirSaldo(int retirar){
+
+    public void disminuirSaldo(int retirar) {
         System.out.println(saldo);
-        this.setSaldo(this.getSaldo()-retirar);
+        this.setSaldo(this.getSaldo() - retirar);
         System.out.println(saldo);
     }
-    
+
     @Override
-    public void mostrarTarjeta(){
+    public void mostrarTarjeta() {
         super.mostrarTarjeta();
-        System.out.println("saldo: "+this.getSaldo());
+        System.out.println("saldo: " + this.getSaldo());
     }
 }
